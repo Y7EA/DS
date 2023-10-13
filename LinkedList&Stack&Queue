@@ -1,0 +1,249 @@
+#include<iostream>
+#include<vector>
+using namespace std ;
+//Y7EA0
+int const N = 200000+5 ;
+int vis[N];
+class Node {
+public:
+    int id ;
+    Node* next ;
+};
+
+Node* create(int id)
+{
+    Node* n = new Node ;
+    n->id = id ;
+    n->next = NULL;
+    return n ;
+}
+//Linkd list
+Node* Add(Node* head , Node* n)
+{
+    if(head == NULL)
+    {
+        head = n ;
+        return head ;
+    }
+    else if (n->id < head->id)
+    {
+        n->next = head ;
+        head = n ;
+        return head ;
+    }
+    else
+    {
+        Node* p1 = head ;
+        Node* p2 = head->next;
+        while(p2!=NULL)
+        {
+            if(n->id < p2->id)
+            {
+                p1->next = n ;
+                n->next = p2 ;
+                return head;
+            }
+            else
+            {
+                p1=p1->next;
+                p2=p2->next;
+            }
+        }
+        p1->next = n ;
+        return head;
+    }
+}
+Node* deleteN(Node* head , int id)
+{
+    if(head == NULL)
+    {
+        return head;
+    }
+    
+    else if (head->id == id)
+    {
+        Node* p = head ;
+        head = head->next ;
+        delete p;
+        return head;
+    }
+    Node* p1 = head;
+    Node* p2 = head->next;
+    while(p2!=NULL)
+    {
+        if(p2->id == id)
+        {
+            p1->next=p2->next;
+            delete p2 ;
+            return head;
+        }
+        else{
+            p1=p1->next;
+            p2=p2->next;
+        }
+    }
+    return head;
+}
+Node* reverse(Node* head) {
+    Node* prv = NULL;
+    Node* cur = head;
+    Node* next = NULL;
+    while (cur != NULL) {
+        next = cur->next;
+        cur->next = prv;
+        prv = cur;
+        cur = next;
+    }
+    head = prv;
+    return head;
+}
+
+int getMax(Node* head)
+{
+    Node* p = head ;
+    int mx = p->id;
+    while(p!=NULL)
+    {
+        if(p->id > mx )
+        {
+            mx = p->id;
+        }
+        p=p->next;
+    }
+    return mx;
+}
+
+int getMin(Node* head)
+{
+    Node* p = head ;
+    int mn = p->id;
+    while(p!=NULL)
+    {
+        if(p->id < mn )
+        {
+            mn = p->id;
+        }
+        p=p->next;
+    }
+    return mn;
+}
+void print(Node* head)
+{
+    Node* p = head ;
+    while(p!=NULL)
+    {
+        cout<<p->id<<" ";
+        p=p->next;
+    }
+    cout<<endl;
+}
+
+//Stack
+Node* push(Node* n , Node* head)
+{
+    if(head == NULL)
+    {
+        head = n ;
+        return head;
+    }
+    else
+    {
+        n->next = head ;
+        head = n ;
+        return head;
+    }
+}
+
+Node* pop(Node * head )
+{
+    Node* p = head ;
+    head = head ->next ;
+    delete p  ;
+    return head ;
+}
+
+int Top(Node* head)
+{
+    return head->id;
+}
+//Queue
+Node* enqueue(Node* n , Node* head)
+{
+    if(head == NULL)
+    {
+        head = n ;
+        return head;
+    }
+    else {
+        Node* p = head ;
+        while(p->next!=NULL)
+        {
+            p=p->next;
+        }
+        p->next = n ;
+        return head;
+    }
+}
+Node* dequeue(Node* head)
+{
+    Node* p = head ;
+    head = head -> next ;
+    delete p ;
+    return head;
+}
+int main()
+{
+    Node* head = NULL;
+    Node* stack = NULL;
+    Node* queue = NULL;
+    int arr[] = {2,4,3,5,6,1};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    for(int i = 0 ; i < size ; i++)
+    {
+        Node* n = create(arr[i]);
+        head = Add(head, n);
+    }
+    print(head);
+    cout<<getMax(head)<<endl;
+    cout<<getMin(head)<<endl;
+    cout<<"----------List--------------"<<endl;
+    //Delete the first element
+    head = deleteN(head, 1);
+    print(head);
+    //Delete the last element
+    head = deleteN(head, 6);
+    print(head);
+    //Delete the mid element
+    head = deleteN(head, 3);
+    print(head);
+    //Delete the element does not exist
+    head = deleteN(head, 99);
+    print(head);
+    head = reverse(head);
+    print (head);
+    cout<<"----------Stack-------------"<<endl;
+    for(int i = 0 ; i < size ; i++)
+    {
+        Node* n = create(arr[i]);
+        stack = push(n, stack);
+    }
+    for(int i = 0 ; i < size ; i++)
+    {
+        cout<<Top(stack)<< " ";
+        stack = pop(stack);
+    }
+    cout<<endl;
+    cout<<"----------Queue-------------"<<endl;
+    for(int i = 0 ; i < size ; i++)
+    {
+        Node* n = create(arr[i]);
+        queue = enqueue(n, queue);
+    }
+    for(int i = 0 ; i < size ; i++)
+    {
+        cout<<Top(queue)<< " ";
+        queue = dequeue(queue);
+    }
+    cout<<endl;
+    
+}
