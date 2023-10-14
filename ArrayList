@@ -1,0 +1,136 @@
+#include<iostream>
+#include<vector>
+using namespace std ;
+//Y7EA0
+template <class T>
+class ArrayList
+{
+private:
+    T* arr ;
+    int capacity ;
+    int size ;
+public:
+    ArrayList()
+    {
+        capacity = 10 ;
+        size = 0 ;
+        arr = new T[capacity];
+    }
+    
+    void expand()
+    {
+        capacity*=2 ;
+        T* arr2 = new T[capacity];
+        for(int i = 0 ; i < size ; i++)
+        {
+            arr2[i] = arr[i];
+        }
+        delete arr;
+        arr= arr2;
+    }
+    void addToLast(T val)
+    {
+        if(size == capacity)
+        {
+            expand();
+        }
+        arr[size]= val ;
+        size++;
+    }
+    void addToFirst(T val)
+    {
+        if(size == capacity)
+        {
+            expand();
+        }
+        for(int i = size ; i >= 1 ; i --)
+        {
+            arr[i]= arr[i-1];
+        }
+        arr[0] = val;
+        size++;
+    }
+    void removeFromFirst()
+    {
+        for(int i= 0 ; i < size ; i ++)
+        {
+            arr[i]= arr[i+1];
+        }
+        size -- ;
+    }
+    
+    void removeFromLast()
+    {
+        size -- ;
+    }
+    
+    void removeByIndex(int index)
+    {
+        if(index>=0 && index<=size)
+        {
+            for(int i = index ; i < size ; i++)
+            {
+                arr[i]= arr[i+1];
+            }
+            size -- ;
+        }
+    }
+    
+    void UpdateElement(int index , T val)
+    {
+        if(index>=0 && index <=size )
+        {
+            arr[index]= val;
+        }
+    }
+   
+    void clear()
+    {
+        size = 0 ;
+    }
+    
+    T get(int index)
+    {
+        if(index>= 0 && index<= size)
+        {
+            return arr[index];
+        }
+    }
+    
+    bool search(T val)
+    {
+        for(int i = 0 ; i < size ; i ++)
+        {
+            if(arr[i]==val)
+            {
+                return true ;
+            }
+        }
+        return false ;
+    }
+    
+    void print() {
+        for(int i = 0 ; i < size ; i ++)
+        {
+            cout<<arr[i]<<" ";
+        }
+        cout<<endl<<"*****************"<<endl;
+    }
+};
+
+int main()
+{
+    ArrayList<int> list;
+    cout<<"----ArrayList----"<<endl;
+    list.addToLast(10);
+    list.addToFirst(20);
+    list.addToLast(30);
+    list.addToFirst(40);
+    list.print();
+    list.removeFromLast();
+    list.print();
+    list.removeFromFirst();
+    list.print();
+    list.removeByIndex(1);
+    list.print();
+}
